@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "lib": ["ESNext"],
+    "target": "ESNext",
+    "esModuleInterop": true,
+    "composite": true,
+    "declaration": true,
+    "resolveJsonModule": true,
+    "outDir": "./dist",
+  },
+  "include": ["src/**/*", "build/**/*"],
+  "exclude": ["node_modules"],
+}
