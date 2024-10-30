@@ -3,12 +3,15 @@ on: workflow_dispatch
 jobs:
   hello_world_job:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./frontend/package/build
     name: A job to say hello
     steps:
-      # To use this repository's private action,
-      # you must check out the repository
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
       - run: npm install
-      - run: node index.js
+      - name: create pull request
+        run: gh pr create -B main -H branch_to_merge --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
