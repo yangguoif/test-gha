@@ -22,6 +22,6 @@ jobs:
           git commit -am "[GHA] sync new icons from Figma"
           git push origin ${{ github.ref_name }}
       - name: create pull request
-        run: gh pr create -B main --title 'Merge icon update into main' --body 'Created by Github action - merge new icons'
+        run: gh pr create -B main -H ${{ github.ref_name }} --title 'Merge icon update into main' --body 'Created by Github action - merge new icons'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
