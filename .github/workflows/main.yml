@@ -9,9 +9,19 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v4
+      - run: |
+          date +%s |
+          awk '{print "gha/sync-icon-"$1}' |
+          xargs git checkout -b
       - run: npm install
       - run: npm run icon:sync
-      - name: Create Release Pull Request
-        uses: changesets/action@v1
+      - name: Commit and push
+        run: |
+          git config user.name icon-bot
+          git add -A
+          git commit -am "[GHA] sync new icons from Figma"
+          git push origin ${{ github.ref_name }}
+      - name: create pull request
+        run: gh pr create -B main --title 'Merge icon update into main' --body 'Created by Github action - merge new icons'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
