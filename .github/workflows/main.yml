@@ -1,4 +1,14 @@
-on: workflow_dispatch
+on: 
+  workflow_dispatch:
+    inputs:
+      message:
+        description: 'Message. What changes were made?'
+        required: false
+        default: 'Updated Figma'
+      version:
+        description: 'Which version of the Figma document to use?'
+        required: false
+        default: '' # Will use latest if not set
 
 jobs:
   hello_world_job:
@@ -9,9 +19,21 @@ jobs:
     name: A job to say hello
     steps:
       - uses: actions/checkout@v4
+      - name: Setup new Git branch name
+        run: |
+          echo "BRANCH_NAME=$(date +%s | awk '{print "gha/sync-icon-"$1}')" >> $GITHUB_ENV
+      - run: |
+          git checkout -b $BRANCH_NAME
       - run: npm install
+      - run: npm run icon:sync
+      - name: Commit and push
+        run: |
+          git config user.name icon-bot
+          git add -A
+          git commit -am "[GHA] sync new icons from Figma"
+          git push origin $BRANCH_NAME
       - name: create pull request
-        run: gh pr create -B main -H branch_to_merge --title 'Merge branch_to_merge into base_branch' --body 'Created by Github action'
+        run: |
+          gh pr create -B main -H $BRANCH_NAME --title 'Merge icon update into main' --body 'Created by Github action - merge new icons'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
