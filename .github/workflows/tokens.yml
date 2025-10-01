@@ -1,10 +1,10 @@
 name: Build design system tokens
 on:
-  push:
+  push
     # paths:
     #   - "./frontend/packages/design-system-tokens/tokens/tokens.json"
-    branches:
-      - "tokens/**"
+    # branches:
+    #   - "tokens/**"
 jobs:
   build-design-system-tokens:
     name: Build design system tokens
